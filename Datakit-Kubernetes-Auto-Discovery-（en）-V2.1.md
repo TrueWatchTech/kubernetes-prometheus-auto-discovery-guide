@@ -418,7 +418,7 @@ After editing these annotations and restarting the service, you can complete the
 ### 4.3 Collector Instance Configuration Mode
 Operation steps: Enable the Datakit KubernetesPrometheus collector and inject the main configuration -> Add collector instance configuration according to the actual situation of the target object.
 
-In this mode, which objects need to be auto-discovered and how to collect their metrics are specified through the collector instance configuration instead of reading the prometheus.io annotation fields. Therefore, in addition to the collector main configuration block and global tag block, we need to continue to configure each block of the collector instance to complete the activation of the auto-discovery function. The steps for enabling the main configuration will not be repeated here. Let's continue to introduce the incremental configuration part based on the main configuration in the previous chapter.
+In this mode, which objects need to be auto-discovered and how to collect their metrics are specified through the collector instance configuration instead of reading the prometheus.io annotation fields. Therefore, in addition to the collector main configuration block and global tag block, we need to continue to configure each block of the collector instance to complete the activation of the auto-discovery function. The steps for enabling the main configuration will not be repeated here. Let's continue to introduce the incremental configuration part based on the main configuration in the previous chapter:
 
 ```toml
 [inputs.kubernetesprometheus]
@@ -478,7 +478,7 @@ Based on this scenario, we copy the [[inputs.kubernetesprometheus.instances]] bl
         service_name = "__kubernetes_service_name"
 ```
 
-Integrate the edited collector instance configuration block with the main configuration block mentioned earlier to get the complete configuration:
+Integrate the edited collector instance configuration block with the main configuration block mentioned earlier to get the complete configuration,Don't forget to set the variable `enable_discovery_of_prometheus_pod_annotations ` to false, or remove it. In the collector instance configuration mode, we do not need to turn on this switch.:
 
 ```toml
 [inputs.kubernetesprometheus]
@@ -489,7 +489,8 @@ Integrate the edited collector instance configuration block with the main config
   # Require Datakit to retain the original Prometheus measurement name  
   keep_exist_metric_name = true
 
-  enable_discovery_of_prometheus_pod_annotations = true
+  # comment out all start with 'enable_*', set their values to 'false', or just delete them
+  #enable_discovery_of_prometheus_pod_annotations = true
 
   [inputs.kubernetesprometheus.global_tags]
     name = "bob"
